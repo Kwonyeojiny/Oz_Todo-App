@@ -52,33 +52,46 @@ function TodoList({ todoList, setTodoList }) {
 
 function Todo({ todo, setTodoList }) {
   const [inputValue, setInputValue] = useState("");
+  const [isEditClick, setIsEditClick] = useState(false);
+
+  const EditClickHandler = () => {
+    setIsEditClick(!isEditClick);
+  }
+
   return (
     <li>
-      {todo.content}
-      <input
-        value={inputValue}
-        onChange={(event) => setInputValue(event.target.value)}
+      <input 
+        type="checkbox"
       />
-      <button
-        onClick={() => {
-          setTodoList((prev) =>
-            prev.map((el) =>
-              el.id === todo.id ? { ...el, content: inputValue } : el
-            )
-          );
-        }}
-      >
-        수정
-      </button>
+      {todo.content}
+      {!isEditClick && <button onClick={EditClickHandler}>수정</button>}
+      {isEditClick && (
+        <div>
+          <input
+            value={inputValue}
+            onChange={(event) => setInputValue(event.target.value)}
+          />
+          <button
+            onClick={() => {
+              setTodoList((prev) =>
+                prev.map((el) =>
+                  el.id === todo.id ? { ...el, content: inputValue } : el
+                )
+              );
+              setInputValue('');
+              setIsEditClick(!isEditClick)
+            }}
+          >수정</button>
+        </div>
+      )}
+      
       <button
         onClick={() => {
           setTodoList((prev) => {
             return prev.filter((el) => el.id !== todo.id);
           });
         }}
-      >
-        삭제
-      </button>
+      >삭제</button>
     </li>
   );
 }
