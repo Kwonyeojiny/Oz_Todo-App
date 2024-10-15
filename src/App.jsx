@@ -24,7 +24,7 @@ function TodoInput({ todoList, setTodoList }) {
   const [inputValue, setInputValue] = useState("");
 
   return (
-    <>
+    <div className="DivAdd">
       <input
         value={inputValue}
         onChange={(event) => setInputValue(event.target.value)}
@@ -39,7 +39,7 @@ function TodoInput({ todoList, setTodoList }) {
       >
         추가하기
       </button>
-    </>
+    </div>
   );
 }
 
@@ -56,45 +56,58 @@ function TodoList({ todoList, setTodoList }) {
 function Todo({ todo, setTodoList }) {
   const [inputValue, setInputValue] = useState("");
   const [isEditClick, setIsEditClick] = useState(false);
+  const [isChecked, setIsChecked] = useState(false);
 
   const EditClickHandler = () => {
     setIsEditClick(!isEditClick);
-  }
+  };
 
   return (
     <li>
-      <input 
-        type="checkbox"
-      />
-      {todo.content}
-      {!isEditClick && <button onClick={EditClickHandler}>수정</button>}
-      {isEditClick && (
-        <div>
-          <input
-            value={inputValue}
-            onChange={(event) => setInputValue(event.target.value)}
-          />
-          <button
-            onClick={() => {
-              setTodoList((prev) =>
-                prev.map((el) =>
-                  el.id === todo.id ? { ...el, content: inputValue } : el
-                )
-              );
-              setInputValue('');
-              setIsEditClick(!isEditClick)
-            }}
-          >수정</button>
-        </div>
-      )}
-      
-      <button
-        onClick={() => {
-          setTodoList((prev) => {
-            return prev.filter((el) => el.id !== todo.id);
-          });
-        }}
-      >삭제</button>
+      <div className="todo-content">
+        <input 
+          type="checkbox"
+          onChange={() => setIsChecked(!isChecked)}
+        />
+        <span style={{ textDecoration: isChecked ? 'line-through' : 'none' }}>{todo.content}</span>
+      </div>
+      <div className="buttons">
+        {!isEditClick && (
+          <div>
+            <button onClick={EditClickHandler}>수정</button>
+              <button
+              onClick={() => {
+                setTodoList((prev) => {
+                  return prev.filter((el) => el.id !== todo.id);
+                });
+              }}
+            >
+              삭제
+            </button>
+          </div>
+        )}
+        {isEditClick && (
+          <div>
+            <input
+              value={inputValue}
+              onChange={(event) => setInputValue(event.target.value)}
+            />
+            <button
+              onClick={() => {
+                setTodoList((prev) =>
+                  prev.map((el) =>
+                    el.id === todo.id ? { ...el, content: inputValue } : el
+                  )
+                );
+                setInputValue("");
+                setIsEditClick(!isEditClick);
+              }}
+            >
+              수정완료
+            </button>
+          </div>
+        )}
+      </div>
     </li>
   );
 }
