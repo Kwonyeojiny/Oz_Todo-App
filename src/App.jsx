@@ -10,6 +10,9 @@ function App() {
 
   return (
     <>
+      <header>
+        <h1>권여진이의 TODO</h1>
+      </header>
       <TodoList todoList={todoList} setTodoList={setTodoList} />
       <hr />
       <TodoInput todoList={todoList} setTodoList={setTodoList} />
